@@ -33,11 +33,11 @@ jobs:
           ./gradlew \
           -Pbuild.number=${{ github.run_number }} \
           clean build bootBuildImage \
-          --imageName=ghcr.io/${{ github.repository }}/${{ github.event.repository.name }} \
+          --imageName=ghcr.io/${{ github.repository }} \
           --info \
           --stacktrace \
           --refresh-dependencies \
           --profile
   
     - name: Publish package
-      run: docker push ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}:latest
+      run: docker push ghcr.io/${{ github.repository }}:latest
