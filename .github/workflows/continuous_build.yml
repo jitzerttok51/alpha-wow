@@ -37,7 +37,7 @@ jobs:
       - name: Build with BAS from ${{ github.reff }} branch
         run: |
           ./gradlew \
-          -Pbuild.number=$GITHUB_RUN_NUMBER \
+          -Pbuild.number=${{ github.run_number }} \
           clean build \
           --info \
           --stacktrace \
