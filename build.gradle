@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+logger.lifecycle "Java home: ${System.getProperty 'java.home'}"
+logger.lifecycle "Java home: ${System.getProperty 'java.version'}"
+
+apply from: "$project.rootDir/settings/dependencies.gradle"
+
+group = 'org.deathkiller'
+sourceCompatibility = '17'
+version = {
+	def major = project.property 'build.version.major'
+	def minor = project.property 'build.version.minor'
+	def micro = project.property 'build.version.micro'
+	String build = project.property 'build.number'
+
+	build = '0'.repeat(4 - build.length()) + build
+
+	"$major.$minor.$micro-v$build"
+}()
+
+logger.lifecycle "Application version: ${project.version}"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project.ext.modules.org_springframework
+	testImplementation project.ext.test_modules.org_springframework_test
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootJar {
+	manifest.attributes (
+			'Implementation-Version': "${project.version}"
+	)
+}
+
+springBoot {
+	buildInfo()
+}

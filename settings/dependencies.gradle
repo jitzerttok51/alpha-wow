@@ -1,0 +1,26 @@
+/*
+ * Common dependencies
+ */
+
+ext {
+    modules = [
+            org_springframework: [
+                    [ 'org.springframework.boot:spring-boot-starter' ]
+            ],
+            org_springframework_web: [
+                    [ 'org.springframework.boot:spring-boot-starter-web' ]
+            ],
+            org_springframework_actuator: [
+                    [ 'org.springframework.boot:spring-boot-starter-actuator' ]
+            ],
+            org_springframework_jpa: [
+                    [ 'org.springframework.boot:spring-boot-starter-jpa' ]
+            ]
+    ]
+
+    test_modules = [
+            org_springframework_test: [
+                    [ 'org.springframework.boot:spring-boot-starter-test' ]
+            ]
+    ]
+}
