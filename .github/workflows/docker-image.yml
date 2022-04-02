@@ -16,8 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
         
-    - name: Log into registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+#    - name: Log into registry
+#      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
       
     - name: Set up JDK
       uses: actions/setup-java@v2
@@ -32,12 +32,15 @@ jobs:
       run: |
           ./gradlew \
           -Pbuild.number=${{ github.run_number }} \
+          -Pgithub.actor=${{ github.actor }} \
+          -Pgithub.token=${{ secrets.GITHUB_TOKEN }} \
+          -Pgithub.package.name=ghcr.io/${{ github.repository }} \
+          -Pgithub.package.version=latest \
           clean build bootBuildImage \
-          --imageName=ghcr.io/${{ github.repository }} \
           --info \
           --stacktrace \
           --refresh-dependencies \
           --profile
   
-    - name: Publish package
-      run: docker push ghcr.io/${{ github.repository }}:latest
+#    - name: Publish package
+#      run: docker push ghcr.io/${{ github.repository }}:latest

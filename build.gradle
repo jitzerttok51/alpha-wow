@@ -15,12 +15,8 @@ sourceCompatibility = '17'
 version = {
 	def major = project.property 'build.version.major'
 	def minor = project.property 'build.version.minor'
-	def micro = project.property 'build.version.micro'
 	String build = project.property 'build.number'
-
-	build = '0'.repeat(4 - build.length()) + build
-
-	"$major.$minor.$micro-v$build"
+	"$major.$minor.$build"
 }()
 
 logger.lifecycle "Application version: ${project.version}"
@@ -47,4 +43,18 @@ bootJar {
 
 springBoot {
 	buildInfo()
+}
+
+bootBuildImage {
+	if(project.hasProperty "github.package.name") {
+		String name = project.property("github.package.name").toString().toLowerCase()
+		String tag = project.properties.getOrDefault("github.package.version", project.version)
+		imageName = "$name:$tag"
+		logger.lifecycle "Image name: $imageName"
+		publish = true
+		docker.publishRegistry {
+			username = project.property "github.actor"
+			password = project.property "github.token"
+		}
+	}
 }
