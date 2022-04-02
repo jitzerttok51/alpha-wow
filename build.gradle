@@ -1,8 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id "com.gorylenko.gradle-git-properties" version "2.3.2"
-	id 'java'
+    id 'org.springframework.boot' version '2.6.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.gorylenko.gradle-git-properties" version "2.3.2"
+    id 'java'
 }
 
 logger.lifecycle "Java home: ${System.getProperty 'java.home'}"
@@ -13,48 +13,57 @@ apply from: "$project.rootDir/settings/dependencies.gradle"
 group = 'org.deathkiller'
 sourceCompatibility = '17'
 version = {
-	def major = project.property 'build.version.major'
-	def minor = project.property 'build.version.minor'
-	String build = project.property 'build.number'
-	"$major.$minor.$build"
+    def major = project.property 'build.version.major'
+    def minor = project.property 'build.version.minor'
+    String build = project.property 'build.number'
+    "$major.$minor.$build"
 }()
 
 logger.lifecycle "Application version: ${project.version}"
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation project.ext.modules.org_springframework_web
-	implementation project.ext.modules.org_springframework_actuator
-	testImplementation project.ext.test_modules.org_springframework_test
+    implementation(
+            project.ext.modules.org_springframework_web,
+            project.ext.modules.org_springframework_actuator,
+            project.ext.modules.vertx_core
+    )
+
+    compileOnly project.ext.modules.lombok
+    annotationProcessor project.ext.modules.lombok
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation project.ext.test_modules.org_springframework_test
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 bootJar {
-	manifest.attributes (
-			'Implementation-Version': "${project.version}"
-	)
+    manifest.attributes(
+            'Implementation-Version': "${project.version}"
+    )
 }
 
 springBoot {
-	buildInfo()
+    buildInfo()
 }
 
 bootBuildImage {
-	if(project.hasProperty "github.package.name") {
-		String name = project.property("github.package.name").toString().toLowerCase()
-		String tag = project.properties.getOrDefault("github.package.version", project.version)
-		imageName = "$name:$tag"
-		logger.lifecycle "Image name: $imageName"
-		publish = true
-		docker.publishRegistry {
-			username = project.property "github.actor"
-			password = project.property "github.token"
-		}
-	}
+    if (project.hasProperty "github.package.name") {
+        String name = project.property("github.package.name").toString().toLowerCase()
+        String tag = project.properties.getOrDefault("github.package.version", project.version)
+        imageName = "$name:$tag"
+        logger.lifecycle "Image name: $imageName"
+        publish = true
+        docker.publishRegistry {
+            username = project.property "github.actor"
+            password = project.property "github.token"
+        }
+    }
 }

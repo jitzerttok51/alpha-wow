@@ -3,6 +3,11 @@
  */
 
 ext {
+    versions = [
+            vertx_core: '4.2.6',
+            lombok: '1.18.22'
+    ]
+
     modules = [
             org_springframework: [
                     [ 'org.springframework.boot:spring-boot-starter' ]
@@ -15,6 +20,12 @@ ext {
             ],
             org_springframework_jpa: [
                     [ 'org.springframework.boot:spring-boot-starter-jpa' ]
+            ],
+            vertx_core: [
+                    [ "io.vertx:vertx-core:${versions.vertx_core}" ]
+            ],
+            lombok: [
+                    [ "org.projectlombok:lombok:${versions.lombok}" ]
             ]
     ]
 
