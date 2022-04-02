@@ -13,6 +13,6 @@ public class RealmEndpointProperties {
     public RealmEndpointProperties() {
         this.deployment.setWorker(true);
         this.network.setHost("localhost");
-        this.network.setPort(8081);
+        this.network.setPort(9100);
     }
 }
