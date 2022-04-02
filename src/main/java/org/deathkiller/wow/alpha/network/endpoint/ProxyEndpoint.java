@@ -5,9 +5,9 @@ import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.deathkiller.wow.alpha.dto.RealmListDTO;
+import org.deathkiller.wow.alpha.network.config.BasicEndpointProperties;
 import org.deathkiller.wow.alpha.network.config.ProxyEndpointProperties;
-import org.deathkiller.wow.alpha.network.config.RealmEndpointProperties;
+import org.deathkiller.wow.alpha.network.config.WorldEndpointProperties;
 import org.deathkiller.wow.alpha.network.packet.PacketWriter;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RealmEndpoint extends AbstractEndpoint {
+public class ProxyEndpoint extends AbstractEndpoint {
 
-    private final RealmEndpointProperties configuration;
-    private final ProxyEndpointProperties proxyConfiguration;
+    private final ProxyEndpointProperties configuration;
+    private final WorldEndpointProperties worldConfiguration;
 
     @Override
     public DeploymentOptions getOptions() {
@@ -27,11 +27,8 @@ public class RealmEndpoint extends AbstractEndpoint {
 
     @Override
     protected void accept(NetSocket socket) {
-        var writer = new RealmListDTO
-                .Builder(configuration.getHost())
-                .addRealm("|cFF00FFFFTest Realm for Alpha", proxyConfiguration.getPort(), 12)
-                .build()
-                .write();
+        PacketWriter writer = new PacketWriter();
+        writer.writeString(worldConfiguration.getHost()+":"+worldConfiguration.getPort());
         socket.end(writer.bufferAuth());
     }
 
@@ -44,5 +41,4 @@ public class RealmEndpoint extends AbstractEndpoint {
     protected NetServerOptions getNetworkOptions() {
         return configuration.getNetwork();
     }
-
 }

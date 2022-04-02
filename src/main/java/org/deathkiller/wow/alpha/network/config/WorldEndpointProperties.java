@@ -5,15 +5,15 @@ import io.vertx.core.net.NetServerOptions;
 import lombok.Data;
 
 @Data
-public class RealmEndpointProperties {
+public class WorldEndpointProperties {
 
     private DeploymentOptions deployment = new DeploymentOptions();
     private NetServerOptions network = new NetServerOptions();
 
-    public RealmEndpointProperties() {
+    public WorldEndpointProperties() {
         this.deployment.setWorker(true);
         this.network.setHost("localhost");
-        this.network.setPort(9100);
+        this.network.setPort(8100);
     }
 
     public int getPort() {

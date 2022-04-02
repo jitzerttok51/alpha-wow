@@ -25,4 +25,16 @@ public class VertxConfig {
     public RealmEndpointProperties getRealmEndpointProperties() {
         return new RealmEndpointProperties();
     }
+
+    @Bean
+    @ConfigurationProperties(prefix = "endpoint.proxy")
+    public ProxyEndpointProperties getProxyEndpointProperties() {
+        return new ProxyEndpointProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "endpoint.world")
+    public WorldEndpointProperties getWorldEndpointProperties() {
+        return new WorldEndpointProperties();
+    }
 }
