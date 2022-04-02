@@ -497,7 +497,8 @@ public enum Opcode {
     CMSG_RWHOIS((short) 0x01EE),
     SMSG_RWHOIS((short) 0x01EF),
     MSG_LOOKING_FOR_GROUP((short) 0x01F0),
-    CMSG_SET_LOOKING_FOR_GROUP((short) 0x01F1);
+    CMSG_SET_LOOKING_FOR_GROUP((short) 0x01F1),
+    UNKOWN((short) 0);
 
 
     private final short code;
@@ -508,5 +509,14 @@ public enum Opcode {
 
     public short getCode() {
         return code;
+    }
+
+    public static Opcode findOpcode(short code) {
+        for(Opcode op : Opcode.values()) {
+            if(op.code == code) {
+                return op;
+            }
+        }
+        return UNKOWN;
     }
 }

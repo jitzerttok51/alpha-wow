@@ -5,6 +5,8 @@ import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.deathkiller.wow.alpha.handler.HandlerManager;
+import org.deathkiller.wow.alpha.handler.WorldSession;
 import org.deathkiller.wow.alpha.network.config.BasicEndpointProperties;
 import org.deathkiller.wow.alpha.network.config.WorldEndpointProperties;
 import org.deathkiller.wow.alpha.network.packet.PacketWriter;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class WorldEndpoint extends AbstractEndpoint {
 
     private final WorldEndpointProperties configuration;
+    private final HandlerManager handlerManager;
 
     @Override
     public DeploymentOptions getOptions() {
@@ -25,7 +28,7 @@ public class WorldEndpoint extends AbstractEndpoint {
 
     @Override
     protected void accept(NetSocket socket) {
-        socket.end();
+        new WorldSession(socket, handlerManager).start();
     }
 
     @Override
