@@ -82,7 +82,7 @@ public class PacketWriter {
     public Buffer buffer() {
         int len = buffer.length() - 2;
         buffer.setByte(0, (byte)(len / 0x100));
-        buffer.setByte(1, (byte)(len / 0x100));
+        buffer.setByte(1, (byte)(len % 0x100));
         return buffer;
     }
 

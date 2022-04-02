@@ -14,6 +14,7 @@ public class WorldSession {
     private final HandlerManager handlerManager;
 
     public void start() {
+        socket.handler(this::handle);
         var writer = new PacketWriter(Opcode.SMSG_AUTH_CHALLENGE);
         writer.writeUInt8((byte) 0);
         writer.writeUInt8((byte) 0);
@@ -22,7 +23,6 @@ public class WorldSession {
         writer.writeUInt8((byte) 0);
         writer.writeUInt8((byte) 0);
         send(writer);
-        socket.handler(this::handle);
     }
 
     private void handle(Buffer buffer) {
